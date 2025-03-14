@@ -1,4 +1,4 @@
-import { LockClosedIcon, LockOpenIcon } from '@heroicons/react/16/solid'
+import { LockOpenIcon } from '@heroicons/react/16/solid'
 import React from 'react'
 
 const UnblockButton = () => {

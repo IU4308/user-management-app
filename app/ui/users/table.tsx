@@ -16,8 +16,8 @@ const UserTable = () => {
         </tr>
       </thead>
       <tbody>
-        {[...Array(15)].map((row, index) => (
-          <UserRow key={index} index={index} />
+        {[...Array(15)].map((_, index) => (
+          <UserRow key={index}/>
 
         ))}
       </tbody>

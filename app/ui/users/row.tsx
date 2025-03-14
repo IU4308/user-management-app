@@ -1,9 +1,5 @@
 
-const UserRow = ({
-    index
-} : {
-    index: number
-}) => {
+const UserRow = () => {
   return (
     <>
       <tr className="text-nowrap">

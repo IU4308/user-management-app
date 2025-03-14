@@ -1,4 +1,3 @@
-import { LockClosedIcon } from "@heroicons/react/16/solid"
 import BlockButton from "./buttons/block"
 import UnblockButton from "./buttons/unblock"
 import DeleteButton from "./buttons/delete"

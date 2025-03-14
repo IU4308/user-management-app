@@ -1,4 +1,4 @@
-import { FireIcon, GlobeAmericasIcon } from "@heroicons/react/16/solid"
+import { FireIcon } from "@heroicons/react/16/solid"
 
 
 const Header = () => {
