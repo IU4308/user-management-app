@@ -1,0 +1,15 @@
+
+:root {
+  --background: #ffffff;
+  --foreground: #171717;
+}
+
+.icon {
+  width: 15px;
+  height: 15px;
+}
+
+.logo {
+  width: 30px;
+  height: 30px;
+}
