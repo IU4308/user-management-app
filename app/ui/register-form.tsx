@@ -8,10 +8,8 @@ import InputField from './input-field';
 const RegisterForm = () => {
     const initialState: UserState = { message: null, errors: {}, formData: new FormData() };
     const [state, formAction] = useActionState(createUser, initialState);
-    // console.log(state.formData.get('name'))
     const name = state.formData.get('name');
     const email = state.formData.get('email');
-    // console.log(Date.now())
     return (
         <div className="container-fluid d-flex flex-column gap-2 py-5">
             <h1 className="py-3">Sign Up</h1>

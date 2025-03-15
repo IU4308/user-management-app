@@ -72,7 +72,9 @@ export async function createUser(prevState: UserState | undefined, formData: For
         };
     }
     const { name, email, password } = validatedFields.data;
-    const hashedPassword = await bcrypt.hash(password, 10)
+    console.time('hashing')
+    const hashedPassword = await bcrypt.hash(password, 2)
+    console.timeEnd('hashing')
     try {
         await sql`
             INSERT INTO users (name, email, password)

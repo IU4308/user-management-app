@@ -5,7 +5,6 @@ import UserToolbar from "../ui/users/toolbar"
 const Page = async () => {
     const users = await fetchUsers();
 
-    // console.log(users);
     return (
         <div className="container-fluid container-lg d-flex flex-column  mt-1">
             <div className="">

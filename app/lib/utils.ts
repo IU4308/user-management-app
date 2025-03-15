@@ -8,7 +8,6 @@ export const formatDateToLocal = (
     const parsedDates = dates.map(date => {
       if (date !== null) return new Date(date)
     });
-    console.log(parsedDates)
     const options: Intl.DateTimeFormatOptions = {
       day: 'numeric',
       month: 'short',

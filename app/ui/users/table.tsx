@@ -24,8 +24,6 @@ const UserTable = ({
 
   const sortedUsers = sortUsers(users, attributes[sorterId], isDescending);
 
-  // console.log(sortedUsers)
-  // const sortedUsers = sortUsers(users,);
   return (
     <table className="table  border shadow table-striped table-hover">
       <thead>
