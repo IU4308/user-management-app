@@ -4,12 +4,17 @@
   --foreground: #171717;
 }
 
-.icon {
+.icon-1 {
   width: 15px;
   height: 15px;
 }
 
-.logo {
+.icon-2 {
+  width: 20px;
+  height: 20px;
+}
+
+.icon-3 {
   width: 30px;
   height: 30px;
 }
