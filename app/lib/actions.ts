@@ -1,6 +1,6 @@
 'use server'
 
-import { auth, signIn } from "@/auth";
+import { signIn } from "@/auth";
 import { AuthError } from "next-auth";
 import { z as x } from "zod";
 import bcrypt from 'bcrypt';

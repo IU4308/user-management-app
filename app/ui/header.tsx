@@ -1,16 +1,13 @@
 import { auth, signOut } from "@/auth";
 import { FireIcon } from "@heroicons/react/16/solid"
-import { User } from "next-auth";
 
 
 const Header = async () => {
   const session = await auth();
   const name = session?.user?.name ?? "";
-  // console.log(session)
   return (
     <nav className="container-lg p-3 d-flex flex-wrap justify-content-between gap-2 align-items-center">
         <div className="d-flex align-items-center gap-2">
-            {/* <GlobeAmericasIcon className="logo" />  */}
             <FireIcon className="icon-3 text-danger" />
             <span className="text-danger">FakeLogo</span>
         </div>

@@ -6,6 +6,7 @@ import { useActionState } from "react";
 import { mutateUsers } from "@/app/lib/actions";
 
 const AdminForm = ({ users }: { users: User[] }) => {
+    // eslint-disable-next-line
     const [errorMessage, formAction, isPending] = useActionState(
         mutateUsers,
         undefined,  
@@ -13,12 +14,14 @@ const AdminForm = ({ users }: { users: User[] }) => {
     const statuses = users.map(user => user.is_blocked)
     return (
         <form action={formAction} className="container-fluid container-lg d-flex flex-column  mt-1">
+            
             <div className="">
                 <UserToolbar statuses={statuses} />
             </div>
             <div className="table-responsive ">
                 <UserTable users={users} />
             </div>
+
         </form>
     )
 }
