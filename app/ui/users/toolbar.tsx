@@ -21,7 +21,7 @@ const UserToolbar = ({ statuses }: {statuses: boolean[]}) => {
             />
             <Button 
                 name=""
-                value="toDelete"
+                value="toDeleted"
                 // type="button"
                 statuses={statuses}
                 icon={<TrashIcon className="icon-1" />}

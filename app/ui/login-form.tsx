@@ -9,7 +9,6 @@ const LoginForm = () => {
         authenticate,
         undefined,  
     );
-    console.log(isPending)
     return (
         <div className="container-fluid d-flex flex-column gap-2 py-5">
             <h1 className="py-3">Sign In</h1>

@@ -6,11 +6,13 @@ import bcrypt from 'bcrypt';
 import postgres from 'postgres';
 import { getUser, markLogin } from './app/lib/data';
 
+ 
 export const { auth, signIn, signOut } = NextAuth({
   ...authConfig,
   providers: [
     Credentials({
         async authorize(credentials) {
+          console.log('test')
           const parsedCredentials = x
             .object({ email: x.string().email(), password: x.string() })
             .safeParse(credentials);
@@ -27,7 +29,7 @@ export const { auth, signIn, signOut } = NextAuth({
 
               if (passwordsMatch) {
                   await markLogin(email)
-                  return {...user, is_blocked: user.is_blocked}
+                  return { ...user, is_blocked: user.is_blocked, is_deleted: false }
               };
             }
             return null;

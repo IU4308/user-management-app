@@ -9,7 +9,6 @@ import { ClipLoader } from 'react-spinners';
 const RegisterForm = () => {
     const initialState: UserState = { message: null, errors: {}, formData: new FormData() };
     const [state, formAction, isPending] = useActionState(createUser, initialState);
-    console.log(isPending)
     const name = state.formData.get('name');
     const email = state.formData.get('email');
     return (
@@ -58,7 +57,7 @@ const RegisterForm = () => {
                 </div>
 
                 <button type="submit" className="btn  btn-primary p-3 d-flex gap-2 justify-content-center align-items-center">
-                    <span>Log in</span>
+                    <span>Register</span>
                     {isPending && <ClipLoader color={'white'}/>}
                 </button>
             </form>

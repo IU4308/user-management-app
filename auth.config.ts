@@ -4,6 +4,7 @@ import { NextResponse } from 'next/server';
 declare module 'next-auth' {
     interface User {
         is_blocked?: boolean;
+        is_deleted?: boolean;
     }
 }
 
@@ -15,42 +16,53 @@ export const authConfig = {
     callbacks: {
         async authorized({ auth, request: { nextUrl, url } }) {
             const base = nextUrl.pathname
+            const isBlocked = auth?.user?.is_blocked;
+            const isDeleted = auth?.user?.is_deleted;
+            const isAuthorized = !!auth?.user && !isBlocked && !isDeleted
+            
             if (base === '/') {
                 return NextResponse.redirect(new URL('/login', url))
             }  
-            const isAuthorized = !!auth?.user && !auth?.user?.is_blocked
+
+            if (base === '/register' && isDeleted) {
+                return true
+            }
+
             if (base === '/admin') {
-                console.log(base, 'test')
-                if (isAuthorized) return true;
-                return false;
+                return isAuthorized ? true : false
             } else if (isAuthorized && (base === '/login' || base === '/register')) {
-                
                 return  Response.redirect(new URL('/admin', nextUrl));
             }
-            if (base === '/register') return true
+
             return true;
         },
         async session({ session, token }) {
-            const baseUrl = process.env.NEXT_PUBLIC_BASE_URL || process.env.VERCEL_URL || 'http://localhost:3000';
-            const res = await fetch(`${baseUrl}/api/get-user`, {
-                method: 'POST',
-                body: JSON.stringify({ email: token.email}),
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-            });
+            session.user.is_blocked = token.is_blocked as boolean
+            session.user.is_deleted = token.is_deleted as boolean
 
-            if (res.ok) {
-                const userDB = await res.json();
-                session.user.is_blocked = userDB.is_blocked;
-            } else {
-                console.error('Failed to fetch user data');
+            if (!token.is_deleted && !token.is_blocked) {
+                const baseUrl = process.env.NEXT_PUBLIC_BASE_URL || process.env.VERCEL_URL || 'http://localhost:3000';
+                const res = await fetch(`${baseUrl}/api/get-user`, {
+                    method: 'POST',
+                    body: JSON.stringify({ email: token.email}),
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                });
+
+                if (res.ok) {
+                    const userDB = await res.json();
+                    token.is_blocked = userDB.is_blocked;
+                } else {
+                    token.is_deleted = true;
+                }
             }
             return session;
         },
         async jwt({ token, user }) {
             if (user) {
                 token.is_blocked = user.is_blocked;
+                token.is_deleted = user.is_deleted;
             } 
             return token;
         },

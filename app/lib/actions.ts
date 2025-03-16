@@ -117,15 +117,20 @@ export async function mutateUsers(
         DELETE FROM users
         WHERE id IN (${params})
     `;
-    const query = action === 'toDelete' ? deleteUsers : changeUserStatus
+    const query = action === 'toDeleted' ? deleteUsers : changeUserStatus
     try {
         await sql.query(query, selectedIds);
     } catch (error) {
         console.log(error)
     }
     
-    if (selectedEmails.includes(currentEmail!) && action === 'toBlocked') {
+    if (selectedEmails.includes(currentEmail!) && (action === 'toBlocked')) {
         redirect('/login')
     }
+
+    if (selectedEmails.includes(currentEmail!) && ( action === 'toDeleted')) {
+        redirect('/login')
+    }
+
     revalidatePath('/admin');
 }

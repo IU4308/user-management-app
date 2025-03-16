@@ -3,7 +3,7 @@ import { useEffect, useState } from "react";
 
 const Button = ({ name, value, icon, statuses}: ButtonProps) => {
     const [type, setType] = useState<ButtonType>('button')
-    const className = `btn border border-primary text-primary d-flex align-items-center gap-1 ${value === 'toDelete' && 'text-danger border-danger'}`;
+    const className = `btn border border-primary text-primary d-flex align-items-center gap-1 ${value === 'toDeleted' && 'text-danger border-danger'}`;
 
     useEffect(() => {
         setType('button')
