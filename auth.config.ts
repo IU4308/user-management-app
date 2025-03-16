@@ -15,6 +15,7 @@ export const authConfig = {
     },
     callbacks: {
         async authorized({ auth, request: { nextUrl, url } }) {
+            console.log(process.env.VERCEL_URL)
             console.log('auth object: ', auth);
             const base = nextUrl.pathname
             const isBlocked = auth?.user?.is_blocked;
