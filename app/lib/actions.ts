@@ -1,6 +1,6 @@
 'use server'
 
-import { signIn } from "@/auth";
+import { auth, signIn } from "@/auth";
 import { AuthError } from "next-auth";
 import { z as x } from "zod";
 import bcrypt from 'bcrypt';
@@ -18,11 +18,14 @@ export async function authenticate(
     if (error instanceof AuthError) {
       switch (error.type) {
         case 'CredentialsSignin':
-          return 'Invalid credentials.';
+          return 'Invalid email or password.';
+        case 'CallbackRouteError':
+            return 'Your account is blocked'
         default:
           return 'Something went wrong.';
       }
     }
+    // console.log(error)
     throw error;
   }
 }
@@ -31,9 +34,7 @@ const UserSchema = x.object({
     name: x.string().nonempty({
         message: 'Name is required'
     }),
-    email: x.string().email().nonempty({
-        message: 'Email is required'
-    }),
+    email: x.string().email(),
     password: x.string().min(1, {
         message: 'Password must be at least 1 character'
     }),
@@ -93,4 +94,31 @@ export async function createUser(prevState: UserState | undefined, formData: For
 
     revalidatePath('/admin');
     redirect('/login')
+}
+
+export async function mutateUsers(
+    state: void,
+    formData: FormData,
+) {
+    const selectedIds = formData.getAll('userId');
+    const action = formData.get('action');
+    const status = action === 'toBlocked'
+    const params = selectedIds.map((_, i) => `$${i + 1}`).join(',');
+    const changeUserStatus = ` 
+        UPDATE users
+        SET is_blocked = ${status}
+        WHERE id IN (${params});
+    `;
+    const deleteUsers = `
+        DELETE FROM users
+        WHERE id IN (${params})
+    `;
+    const query = action === 'toDelete' ? deleteUsers : changeUserStatus
+    try {
+        await sql.query(query, selectedIds);
+    } catch (error) {
+        console.log(error)
+    }
+
+    revalidatePath('/admin');
 }

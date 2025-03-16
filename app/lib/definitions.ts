@@ -10,5 +10,14 @@ export type User = {
 
 export type Attribute = 'name' | 'email' | 'is_blocked' | 'created_at' | 'last_login'
 
-
+export type ButtonType = 'button' | 'submit' | 'reset';
   
+export type ButtonProps = {
+    name: string;
+    value: string;
+    // type: 'button' | 'submit' | 'reset';
+    icon: React.ReactNode;
+    statuses: boolean[]
+}
+
+// export type status = ''

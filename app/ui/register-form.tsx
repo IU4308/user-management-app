@@ -43,20 +43,9 @@ const RegisterForm = () => {
                     type='password'
                     name='passwordConfirm'
                     placeholder="Repeat your password"
-                    errors={state.errors?.password}
+                    errors={state.errors?.passwordConfirm}
                     icon={<LockOutline className=' bg-white icon-1' />}
                 />
-                {/* <div className="container">
-                    <div className="input-group mb-3">
-                        <span className="input-group-text border-0 border-bottom">
-                            <LockOutline className=' bg-white icon-1' />
-                        </span>
-                        <input type="password" className="form-control border-0 border-bottom rounded-0 p-3 p-3" id="pwd" placeholder="Repeat your password" name="passwordConfirm" />
-                    </div>
-                    <div id="passwordConfirm-error" aria-live="polite" aria-atomic="true">
-                        {state.errors?.passwordConfirm && <p className="text-danger">{state.errors.passwordConfirm[0]}</p>}
-                    </div>
-                </div> */}
                 <div id="create-error" aria-live="polite" aria-atomic="true">
                     {state.message &&
 
