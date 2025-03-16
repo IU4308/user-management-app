@@ -15,7 +15,8 @@ export const authConfig = {
     },
     callbacks: {
         async authorized({ auth, request: { nextUrl, url } }) {
-            console.log(process.env.VERCEL_URL)
+            // console.log(process.env.VERCEL_URL)
+            console.log('nextUrl: ', nextUrl.href)
             console.log('auth object: ', auth);
             const base = nextUrl.pathname
             const isBlocked = auth?.user?.is_blocked;
@@ -43,16 +44,21 @@ export const authConfig = {
             session.user.is_deleted = token.is_deleted as boolean
 
             console.log('Session callback:', { session, token });
-
+            
             if (!token.is_deleted && !token.is_blocked) {
-                const baseUrl = process.env.NEXT_PUBLIC_BASE_URL || process.env.VERCEL_URL || 'http://localhost:3000';
+                const baseUrl = process.env.VERCEL_URL
+                // const baseUrl = 'http://localhost:3000';
+                // console.log
+                // const fullBaseUrl = baseUrl.startsWith('http') ? baseUrl : `https://${baseUrl}`;
+                console.log('Fetching user data from:', baseUrl);
                 
                 try {
-                    const res = await fetch(`${baseUrl}/api/get-user`, {
+                    const res = await fetch(`https://${baseUrl}/api/get-user`, {
                         method: 'POST',
                         body: JSON.stringify({ email: token.email}),
                         headers: {
                             'Content-Type': 'application/json',
+                            // 'Authorization': `Bearer ${token.accessToken}`,
                         },
                     });
     
