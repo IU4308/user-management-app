@@ -1,19 +1,13 @@
-// 'use client';
-import { User } from "@/app/lib/definitions"
+'use client';
+import { User, UserRowProps } from "@/app/lib/definitions"
 import { formatDateToLocal } from "@/app/lib/utils"
 
 const UserRow = ({ 
   user, 
   index,
   selectedRows,
-  handleSelect
-}: { 
-  user: User;
-  index: number;
-  selectedRows: number[];
-  handleSelect: (index: number) => void
-
-}) => {
+  handleSelect,
+}: UserRowProps) => {
   const [ created_at, last_login ] = formatDateToLocal([user.created_at, user.last_login])
   const isSelected = selectedRows.includes(index)
   
@@ -33,6 +27,7 @@ const UserRow = ({
                 }}
                 className="form-check-input"
               />
+              <input type="hidden" name={isSelected ? "email" : ''} value={user.email}/>
           </th>
           <td>{user.name}</td>
           <td>{user.email}</td>

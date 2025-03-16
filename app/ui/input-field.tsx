@@ -1,12 +1,4 @@
-interface InputFieldProps {
-    value: FormDataEntryValue | null;
-    type: string;
-    placeholder: string;
-    name: string;
-    icon: React.ReactNode;
-    errors?: string[];
-}
-
+import { InputFieldProps } from "../lib/definitions"
 
 const InputField: React.FC<InputFieldProps> = ({ value, type, placeholder, name, icon, errors }) => {
     const inputValue = value !== null ? String(value) : ''

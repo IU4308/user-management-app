@@ -8,7 +8,7 @@ import { mutateUsers } from "@/app/lib/actions";
 const AdminForm = ({ users }: { users: User[] }) => {
     // eslint-disable-next-line
     const [errorMessage, formAction, isPending] = useActionState(
-        mutateUsers,
+        (state: void, formData: FormData) => mutateUsers(state, formData),
         undefined,  
     );
     const statuses = users.map(user => user.is_blocked)

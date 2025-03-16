@@ -2,12 +2,14 @@
 import { EnvelopeIcon, ExclamationCircleIcon, LockClosedIcon } from '@heroicons/react/16/solid';
 import { useActionState } from 'react';
 import { authenticate } from '@/app/lib/actions';
+import ClipLoader from "react-spinners/ClipLoader";
 
 const LoginForm = () => {
     const [errorMessage, formAction, isPending] = useActionState(
         authenticate,
         undefined,  
     );
+    console.log(isPending)
     return (
         <div className="container-fluid d-flex flex-column gap-2 py-5">
             <h1 className="py-3">Sign In</h1>
@@ -25,12 +27,11 @@ const LoginForm = () => {
                     <input type="password" className="form-control border-0 border-bottom rounded-0 p-3 p-3" id="pwd" placeholder="Enter password" name="password" />
                 </div>
                 <input type="hidden" name="redirectTo" value={'/admin'} />
-                <button aria-disabled={isPending} type="submit" className="btn  btn-primary p-3 ">Log in</button>
-                <div
-                    className='d-flex gap-2 text-danger'
-                aria-live="polite"
-                aria-atomic="true"
-                >
+                <button aria-disabled={isPending} type="submit" className="btn  btn-primary p-3 d-flex gap-2 justify-content-center align-items-center">
+                    <span>Log in</span>
+                    {isPending && <ClipLoader color={'white'}/>}
+                </button>
+                <div className='d-flex gap-2 text-danger'>
                     {errorMessage && (
                         <>
                             <ExclamationCircleIcon className="icon-2" />

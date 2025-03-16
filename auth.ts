@@ -2,39 +2,34 @@ import NextAuth from 'next-auth';
 import { authConfig } from './auth.config';
 import Credentials from 'next-auth/providers/credentials';
 import { z as x } from 'zod';
-import type { User } from '@/app/lib/definitions';
 import bcrypt from 'bcrypt';
 import postgres from 'postgres';
 import { getUser, markLogin } from './app/lib/data';
 
- 
 export const { auth, signIn, signOut } = NextAuth({
   ...authConfig,
   providers: [
     Credentials({
         async authorize(credentials) {
-          console.time('authorize')
           const parsedCredentials = x
             .object({ email: x.string().email(), password: x.string() })
             .safeParse(credentials);
             
             if (parsedCredentials.success) {
               const { email, password } = parsedCredentials.data;
-              console.time('fetching')
               const user = await getUser(email);
-              console.timeEnd('fetching')
               if (!user) return null;
               const passwordsMatch = await bcrypt.compare(password, user.password);
-              console.timeEnd('authorize');
-              // if (user.is_blocked === true) {
-              //   throw new Error();
-              // }
+
+              if (user.is_blocked === true) {
+                throw new Error();
+              }
+
               if (passwordsMatch) {
                   await markLogin(email)
-                  return user
+                  return {...user, is_blocked: user.is_blocked}
               };
             }
-       
             return null;
         },
       }),

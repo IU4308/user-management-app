@@ -1,3 +1,4 @@
+import { ColumnHeadProps } from "@/app/lib/definitions";
 import { ChevronDownIcon, ChevronUpDownIcon, ChevronUpIcon } from "@heroicons/react/16/solid"
 
 const ColumnHead = ({ 
@@ -6,14 +7,7 @@ const ColumnHead = ({
   sorterId,
   handleSort,
   isDescending,
-  // setIsDescending
-}: { 
-  title: string;
-  index: number;
-  sorterId: number;
-  handleSort: (id: number) => void;
-  isDescending: boolean;
-}) => {
+}: ColumnHeadProps) => {
   return (
     <th scope="col d-flex align-items-center">
       <button 

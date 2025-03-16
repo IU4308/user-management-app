@@ -9,9 +9,9 @@ const columnTitles = ['Name', 'Email', 'Status', 'Registered at', 'Last Login']
 const attributes: Attribute[] = ['name', 'email', 'is_blocked', 'created_at', 'last_login']
 
 const UserTable = ({
-  users
+  users,
 }: {
-  users: User[]
+  users: User[],
 }) => {
   const [sorterId, setSorterId] = useState(3);
   const [isDescending, setIsDescending] = useState(true);
@@ -35,10 +35,9 @@ const UserTable = ({
   }, [users])
 
   const sortedUsers = sortUsers(users, attributes[sorterId], isDescending);
-
-
+  
   return (
-    <table className="table  border shadow table-striped table-hover">
+    <table className="table  border shadow table-striped ">
       <thead>
         <tr className='text-nowrap'>
           <th scope="col">

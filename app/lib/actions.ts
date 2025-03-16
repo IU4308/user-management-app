@@ -1,6 +1,6 @@
 'use server'
 
-import { signIn } from "@/auth";
+import { auth, signIn } from "@/auth";
 import { AuthError } from "next-auth";
 import { z as x } from "zod";
 import bcrypt from 'bcrypt';
@@ -25,7 +25,6 @@ export async function authenticate(
           return 'Something went wrong.';
       }
     }
-    // console.log(error)
     throw error;
   }
 }
@@ -88,7 +87,8 @@ export async function createUser(prevState: UserState | undefined, formData: For
             ? 'User with this email already exists' : 'Something went wrong';
         return {
             message: message,
-            formData: formData
+            formData: formData,
+            
         }
     }
 
@@ -98,9 +98,13 @@ export async function createUser(prevState: UserState | undefined, formData: For
 
 export async function mutateUsers(
     state: void,
-    formData: FormData,
+    formData: FormData
 ) {
+    const session = await auth()
+    
+    const currentEmail = session?.user?.email
     const selectedIds = formData.getAll('userId');
+    const selectedEmails = formData.getAll('email');
     const action = formData.get('action');
     const status = action === 'toBlocked'
     const params = selectedIds.map((_, i) => `$${i + 1}`).join(',');
@@ -119,6 +123,9 @@ export async function mutateUsers(
     } catch (error) {
         console.log(error)
     }
-
+    
+    if (selectedEmails.includes(currentEmail!) && action === 'toBlocked') {
+        redirect('/login')
+    }
     revalidatePath('/admin');
 }

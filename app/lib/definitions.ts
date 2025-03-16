@@ -15,9 +15,30 @@ export type ButtonType = 'button' | 'submit' | 'reset';
 export type ButtonProps = {
     name: string;
     value: string;
-    // type: 'button' | 'submit' | 'reset';
     icon: React.ReactNode;
     statuses: boolean[]
 }
 
-// export type status = ''
+export type ColumnHeadProps = {
+    title: string;
+    index: number;
+    sorterId: number;
+    handleSort: (id: number) => void;
+    isDescending: boolean;
+}
+
+export type UserRowProps = {
+    user: User;
+    index: number;
+    selectedRows: number[];
+    handleSelect: (index: number) => void;
+}
+
+export interface InputFieldProps {
+    value: FormDataEntryValue | null;
+    type: string;
+    placeholder: string;
+    name: string;
+    icon: React.ReactNode;
+    errors?: string[];
+}

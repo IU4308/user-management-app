@@ -4,10 +4,12 @@ import { LockClosedIcon as LockOutline } from '@heroicons/react/24/outline';
 import { useActionState } from 'react';
 import { createUser, UserState } from '../lib/actions';
 import InputField from './input-field';
+import { ClipLoader } from 'react-spinners';
 
 const RegisterForm = () => {
     const initialState: UserState = { message: null, errors: {}, formData: new FormData() };
-    const [state, formAction] = useActionState(createUser, initialState);
+    const [state, formAction, isPending] = useActionState(createUser, initialState);
+    console.log(isPending)
     const name = state.formData.get('name');
     const email = state.formData.get('email');
     return (
@@ -55,7 +57,10 @@ const RegisterForm = () => {
                     }
                 </div>
 
-                <button type="submit" className="btn  btn-primary p-3 ">Sign Up</button>
+                <button type="submit" className="btn  btn-primary p-3 d-flex gap-2 justify-content-center align-items-center">
+                    <span>Log in</span>
+                    {isPending && <ClipLoader color={'white'}/>}
+                </button>
             </form>
         </div>
     )
