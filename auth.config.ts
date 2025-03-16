@@ -15,6 +15,7 @@ export const authConfig = {
     },
     callbacks: {
         async authorized({ auth, request: { nextUrl, url } }) {
+            console.log('auth object: ', auth);
             const base = nextUrl.pathname
             const isBlocked = auth?.user?.is_blocked;
             const isDeleted = auth?.user?.is_deleted;
@@ -40,20 +41,29 @@ export const authConfig = {
             session.user.is_blocked = token.is_blocked as boolean
             session.user.is_deleted = token.is_deleted as boolean
 
+            console.log('Session callback:', { session, token });
+
             if (!token.is_deleted && !token.is_blocked) {
                 const baseUrl = process.env.NEXT_PUBLIC_BASE_URL || process.env.VERCEL_URL || 'http://localhost:3000';
-                const res = await fetch(`${baseUrl}/api/get-user`, {
-                    method: 'POST',
-                    body: JSON.stringify({ email: token.email}),
-                    headers: {
-                        'Content-Type': 'application/json',
-                    },
-                });
-
-                if (res.ok) {
-                    const userDB = await res.json();
-                    token.is_blocked = userDB.is_blocked;
-                } else {
+                
+                try {
+                    const res = await fetch(`${baseUrl}/api/get-user`, {
+                        method: 'POST',
+                        body: JSON.stringify({ email: token.email}),
+                        headers: {
+                            'Content-Type': 'application/json',
+                        },
+                    });
+    
+                    if (res.ok) {
+                        const userDB = await res.json();
+                        token.is_blocked = userDB.is_blocked;
+                    } else {
+                        console.error('Error fetching user data', res.statusText);
+                        token.is_deleted = true;
+                    }
+                } catch (error) {
+                    console.error('Error fetching user data:', error);
                     token.is_deleted = true;
                 }
             }
@@ -64,6 +74,9 @@ export const authConfig = {
                 token.is_blocked = user.is_blocked;
                 token.is_deleted = user.is_deleted;
             } 
+
+            console.log('JWT callback:', { token, user });
+
             return token;
         },
     },
