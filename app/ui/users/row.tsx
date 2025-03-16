@@ -1,5 +1,5 @@
 'use client';
-import { User, UserRowProps } from "@/app/lib/definitions"
+import { UserRowProps } from "@/app/lib/definitions"
 import { formatDateToLocal } from "@/app/lib/utils"
 
 const UserRow = ({ 
