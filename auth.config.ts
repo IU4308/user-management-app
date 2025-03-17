@@ -67,7 +67,9 @@ export const authConfig = {
                         const contentType = res.headers.get('content-type');
                         if (contentType && contentType.includes('application/json')) {
                             const userDB = await res.json();
+                            console.log(userDB)
                             token.is_blocked = userDB.is_blocked;
+                            // console.log()
                         } else {
                             const text = await res.text();
                             console.error('Unexpected response format:', text);
