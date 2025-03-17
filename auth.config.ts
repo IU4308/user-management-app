@@ -42,15 +42,16 @@ export const authConfig = {
             session.user.is_deleted = token.is_deleted as boolean
             return session;
         },
-        async jwt({ token, user, trigger }) {
+        async jwt({ token, user }) {
             if (user) {
                 token.is_blocked = user.is_blocked;
                 token.is_deleted = user.is_deleted;
             } else if (token.email) {
-                const baseUrl =
-                    process.env.NEXT_PUBLIC_BASE_URL ||
-                    (process.env.VERCEL_URL ? `https://${process.env.VERCEL_URL}` : 'http://localhost:3000');
-                    // process.env.VERCEL_URL
+                // const baseUrl =
+                //     // process.env.NEXT_PUBLIC_BASE_URL ||
+                //     // (process.env.VERCEL_URL ? `https://${process.env.VERCEL_URL}` : 'http://localhost:3000');
+                //     process.env.VERCEL_URL
+                const baseUrl = 'https://user-management-app-omega-one.vercel.app'
                 console.log('Fetching user data from:', baseUrl);
                 try {
                     const res = await fetch(`${baseUrl}/api/get-user`, {
