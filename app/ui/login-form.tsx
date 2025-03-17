@@ -1,8 +1,11 @@
 'use client'
 import { EnvelopeIcon, ExclamationCircleIcon, LockClosedIcon } from '@heroicons/react/16/solid';
-import { useActionState } from 'react';
+import { useActionState, useEffect, useState } from 'react';
 import { authenticate } from '@/app/lib/actions';
 import ClipLoader from "react-spinners/ClipLoader";
+import { usePathname, useSearchParams } from 'next/navigation';
+import { useRouter } from 'next/router';
+import Alert from './alert';
 
 const LoginForm = () => {
     const [errorMessage, formAction, isPending] = useActionState(
@@ -11,9 +14,10 @@ const LoginForm = () => {
     );
 
     return (
+        
         <div className="container-fluid d-flex flex-column gap-2 py-5">
+            {!errorMessage && <Alert />}
             <h1 className="py-3">Sign In</h1>
-            
             <form action={formAction} className="row gap-4">
                 <div className="input-group mb-3 mt-3">
                     <span className="input-group-text border-0 border-bottom">
@@ -32,14 +36,10 @@ const LoginForm = () => {
                     <span>Log in</span>
                     {isPending && <ClipLoader color={'white'}/>}
                 </button>
-                <div className='d-flex gap-2 text-danger'>
-                    {errorMessage && (
-                        <>
-                            <ExclamationCircleIcon className="icon-2" />
-                            <p >{errorMessage}</p>
-                        </>
-                    )}
-                </div>
+                {errorMessage && <div className='d-flex gap-2 text-danger'>
+                    <ExclamationCircleIcon className="icon-2" />
+                    <p>{errorMessage}</p>
+                </div>}
             </form>
         </div>
     )

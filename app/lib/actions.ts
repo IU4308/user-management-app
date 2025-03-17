@@ -93,7 +93,7 @@ export async function createUser(prevState: UserState | undefined, formData: For
     }
 
     revalidatePath('/admin');
-    redirect('/login')
+    redirect('/login?success=')
 }
 
 export async function mutateUsers(
@@ -121,16 +121,18 @@ export async function mutateUsers(
     try {
         await sql.query(query, selectedIds);
     } catch (error) {
-        console.log(error)
+        // console.log(error)
+        redirect('/admin?fail=')
     }
     
     if (selectedEmails.includes(currentEmail!) && (action === 'toBlocked')) {
-        redirect('/login')
+        redirect('/login?blocked=')
     }
 
     if (selectedEmails.includes(currentEmail!) && ( action === 'toDeleted')) {
-        redirect('/login')
+        redirect('/login?deleted=')
     }
 
     revalidatePath('/admin');
+    redirect('/admin?success=')
 }
