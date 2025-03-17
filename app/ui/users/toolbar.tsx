@@ -1,8 +1,9 @@
+import { ClipLoader } from "react-spinners"
 import Flash from "../flash"
 import Button from "./button"
 import { LockClosedIcon, LockOpenIcon, TrashIcon } from "@heroicons/react/16/solid"
 
-const UserToolbar = ({ statuses }: {statuses: boolean[]}) => {
+const UserToolbar = ({ statuses, isPending }: { statuses: boolean[], isPending: boolean}) => {
 
     return (
         <div className=' d-flex flex-wrap align-items-center gap-3 py-2'>
@@ -27,6 +28,7 @@ const UserToolbar = ({ statuses }: {statuses: boolean[]}) => {
                 />
 
             </div>
+            {isPending && <ClipLoader color={'black'}/>}
             <Flash />
         </div>
     )

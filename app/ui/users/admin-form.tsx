@@ -11,12 +11,13 @@ const AdminForm = ({ users }: { users: User[] }) => {
         (state: void, formData: FormData) => mutateUsers(state, formData),
         undefined,  
     );
+    console.log(isPending)
     const statuses = users.map(user => user.is_blocked)
     return (
         <form action={formAction} className="container-fluid container-lg d-flex flex-column  mt-1">
             
             <div className="">
-                <UserToolbar statuses={statuses} />
+                <UserToolbar statuses={statuses} isPending={isPending}  />
             </div>
             <div className="table-responsive ">
                 <UserTable users={users} />
