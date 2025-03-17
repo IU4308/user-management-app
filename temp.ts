@@ -15,7 +15,9 @@ export const authConfig = {
     },
     callbacks: {
         async authorized({ auth, request: { nextUrl, url, cookies } }) {
-            console.log('AAAAAAAAAAAA',auth, 'AAAAAAAAAAa')
+            // console.log('nextUrl: ', nextUrl.href)
+            // console.log('auth object: ', auth);
+            // console.log(cookies)
             const base = nextUrl.pathname
             const isBlocked = auth?.user?.is_blocked;
             const isDeleted = auth?.user?.is_deleted;
@@ -40,42 +42,66 @@ export const authConfig = {
         async session({ session, token }) {
             session.user.is_blocked = token.is_blocked as boolean
             session.user.is_deleted = token.is_deleted as boolean
-            return session;
-        },
-        async jwt({ token, user, trigger }) {
-            if (user) {
-                token.is_blocked = user.is_blocked;
-                token.is_deleted = user.is_deleted;
-            } else if (token.email) {
+            // console.log(request.headers.get('cookie'))
+            // console.log(NextRequest.cookies)
+
+            // console.log('Session callback:', { session, token });
+            
+            if (!token.is_deleted && !token.is_blocked) {
                 const baseUrl =
                     process.env.NEXT_PUBLIC_BASE_URL ||
                     (process.env.VERCEL_URL ? `https://${process.env.VERCEL_URL}` : 'http://localhost:3000');
                 console.log('Fetching user data from:', baseUrl);
+                // console.log(document.cookie)
+                
                 try {
                     const res = await fetch(`${baseUrl}/api/get-user`, {
                         method: 'POST',
-                        body: JSON.stringify({ email: token.email }),
+                        body: JSON.stringify({ email: token.email}),
                         headers: {
-                          'Content-Type': 'application/json',
-                          Authorization: `Bearer ${token.sub}`,
+                            'Content-Type': 'application/json',
+                            // Cookie: NextRequest.headers.get('cookie') || '',
+                            // Cookie: document.cookie,
+                            // 'Authorization': `Bearer ${token.accessToken}`,
                         },
+                        credentials: 'include',
                     });
     
                     if (res.ok) {
                         const userDB = await res.json();
-                        token.is_blocked = JSON.parse(userDB).is_blocked;
-                      } else {
-                        const errorData = await res.json();
-                        console.error('Failed to fetch user data', res.statusText, errorData.message);
-                        token.is_deleted = true;
-                    }
+                        token.is_blocked = userDB.is_blocked;
+                    } else {
+                        const contentType = res.headers.get('content-type');
+                        if (contentType && contentType.includes('application/json')) {
+                            const errorData = await res.json();
+                            console.error('Error fetching user data:', res.statusText, errorData.Message);
+                        } else {
+                            const text = await res.text();
+                            console.error('Unexpected response format:', text);
+                        }
 
+
+                        // console.error('Error fetching user data', res.statusText, errorData);
+                        // token.is_deleted = true;
+                    }
                 } catch (error) {
                     console.error('Error fetching user data:', error);
                     token.is_deleted = true;
                 }
             }
-            console.log('TTTTTTT', token, 'TTTTTTTTT')
+            return session;
+        },
+        async jwt({ token, user, trigger }) {
+            // console.log(trigger)
+            if (user) {
+                // console.log(user)
+                token.is_blocked = user.is_blocked;
+                token.is_deleted = user.is_deleted;
+            } 
+            // console.log(token)
+
+            // console.log('JWT callback:', { token, user });
+
             return token;
         },
     },

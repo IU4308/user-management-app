@@ -25,7 +25,7 @@ export async function authenticate(
           return 'Something went wrong.';
       }
     }
-    console.error('Authentication error',error)
+    // console.error('Authentication error',error)
     throw error;
   }
 }
