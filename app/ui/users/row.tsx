@@ -26,7 +26,7 @@ const UserRow = ({
                     }}
                     className="form-check-input"
                   />
-                  <input type="hidden" name={isSelected ? "email" : ''} value={user.email}/>
+                  {/* <input type="hidden" name={isSelected ? "email" : ''} value={user.email}/> */}
               </th>
               <td>{user.name}</td>
               <td>{user.email}</td>

@@ -90,11 +90,11 @@ export async function mutateUsers(
     state: void,
     formData: FormData
 ) {
-    const session = await auth()
+    // const session = await auth()
     
-    const currentEmail = session?.user?.email
+    // const currentEmail = session?.user?.email
     const selectedIds = formData.getAll('userId');
-    const selectedEmails = formData.getAll('email');
+    // const selectedEmails = formData.getAll('email');
     const action = formData.get('action');
     const status = action === 'toBlocked'
     const params = selectedIds.map((_, i) => `$${i + 1}`).join(',');
@@ -115,19 +115,23 @@ export async function mutateUsers(
         await flashMessage("Fail", 'error');
         redirect('/admin')
     }
+
+    const session = await auth()
+    const isBlocked = session?.user?.is_blocked
+    const isDeleted = session?.user?.is_deleted
     
-    if (selectedEmails.includes(currentEmail!) && (action === 'toBlocked')) {
+    if (isBlocked) {
         await flashMessage("Your account has been blocked", 'error');
         redirect('/login')
     }
 
-    if (selectedEmails.includes(currentEmail!) && ( action === 'toDeleted')) {
+    if (isDeleted) {
         await flashMessage("Your account has been deleted", 'error');
         redirect('/login')
     }
 
     revalidatePath('/admin');
 
-    await flashMessage("Success", 'success');
+    await flashMessage("The operation has been successfull", 'success');
     redirect('/admin')
 }
