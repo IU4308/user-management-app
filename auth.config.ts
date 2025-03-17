@@ -63,8 +63,17 @@ export const authConfig = {
                     });
     
                     if (res.ok) {
-                        const userDB = await res.json();
-                        token.is_blocked = JSON.parse(userDB).is_blocked;
+                        const contentType = res.headers.get('content-type');
+                        if (contentType && contentType.includes('application/json')) {
+                            const userDB = await res.json();
+                            token.is_blocked = userDB.is_blocked;
+                        } else {
+                            const text = await res.text();
+                            console.error('Unexpected response format:', text);
+                            token.is_deleted = true;
+                        }
+                        // const userDB = await res.json();
+                        // token.is_blocked = JSON.parse(userDB).is_blocked;
                       } else {
                         const errorData = await res.json();
                         console.error('Failed to fetch user data', res.statusText, errorData.message);
