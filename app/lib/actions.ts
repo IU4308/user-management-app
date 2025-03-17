@@ -8,6 +8,7 @@ import { sql } from "@vercel/postgres";
 import { revalidatePath } from "next/cache";
 import { redirect } from 'next/navigation';
 import { flashMessage } from "@thewebartisan7/next-flash-message";
+import { UserState } from "./definitions";
 
 export async function authenticate(
   prevState: string | undefined,
@@ -44,18 +45,6 @@ const UserSchema = x.object({
     path: ["passwordConfirm"],
 });
 
-
-export type UserState = {
-    errors?: {
-        name?: string[];
-        email?: string[];
-        password?: string[];
-        passwordConfirm?: string[];
-    };
-    message?: string | null;
-    formData: FormData
-}
-
 export async function createUser(prevState: UserState | undefined, formData: FormData) {
     const validatedFields = UserSchema.safeParse({
         name: formData.get('name'),
@@ -73,9 +62,7 @@ export async function createUser(prevState: UserState | undefined, formData: For
         };
     }
     const { name, email, password } = validatedFields.data;
-    console.time('hashing')
     const hashedPassword = await bcrypt.hash(password, 2)
-    console.timeEnd('hashing')
     try {
         await sql`
             INSERT INTO users (name, email, password)

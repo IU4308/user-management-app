@@ -8,6 +8,17 @@ export type User = {
     is_blocked: boolean;
 };
 
+export type UserState = {
+    errors?: {
+        name?: string[];
+        email?: string[];
+        password?: string[];
+        passwordConfirm?: string[];
+    };
+    message?: string | null;
+    formData: FormData
+}
+
 export type Attribute = 'name' | 'email' | 'is_blocked' | 'created_at' | 'last_login'
 
 export type ButtonType = 'button' | 'submit' | 'reset';

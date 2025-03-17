@@ -2,9 +2,10 @@
 import { EnvelopeIcon, LockClosedIcon as LockSolid, UserIcon } from '@heroicons/react/16/solid';
 import { LockClosedIcon as LockOutline } from '@heroicons/react/24/outline';
 import { useActionState } from 'react';
-import { createUser, UserState } from '../lib/actions';
+import { createUser } from '../lib/actions';
 import InputField from './input-field';
 import { ClipLoader } from 'react-spinners';
+import { UserState } from '../lib/definitions';
 
 const RegisterForm = () => {
     const initialState: UserState = { message: null, errors: {}, formData: new FormData() };
