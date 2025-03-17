@@ -3,7 +3,6 @@ import { authConfig } from './auth.config';
 import Credentials from 'next-auth/providers/credentials';
 import { z as x } from 'zod';
 import bcrypt from 'bcrypt';
-import postgres from 'postgres';
 import { getUser, markLogin } from './app/lib/data';
 
  

@@ -15,9 +15,8 @@ export const authConfig = {
     },
     callbacks: {
         async authorized({ auth, request: { nextUrl, url } }) {
-            // console.log(process.env.VERCEL_URL)
-            console.log('nextUrl: ', nextUrl.href)
-            console.log('auth object: ', auth);
+            // console.log('nextUrl: ', nextUrl.href)
+            // console.log('auth object: ', auth);
             const base = nextUrl.pathname
             const isBlocked = auth?.user?.is_blocked;
             const isDeleted = auth?.user?.is_deleted;
@@ -43,17 +42,16 @@ export const authConfig = {
             session.user.is_blocked = token.is_blocked as boolean
             session.user.is_deleted = token.is_deleted as boolean
 
-            console.log('Session callback:', { session, token });
+            // console.log('Session callback:', { session, token });
             
             if (!token.is_deleted && !token.is_blocked) {
-                const baseUrl = process.env.VERCEL_URL
-                // const baseUrl = 'http://localhost:3000';
-                // console.log
-                // const fullBaseUrl = baseUrl.startsWith('http') ? baseUrl : `https://${baseUrl}`;
-                console.log('Fetching user data from:', baseUrl);
+                const baseUrl = process.env.NEXT_PUBLIC_BASE_URL || process.env.VERCEL_URL || 'http://localhost:3000'
+                // const baseUrl = process.env.VERCEL_URL
+                const fullBaseUrl = baseUrl.startsWith('http') ? baseUrl : `https://${baseUrl}`;
+                console.log('Fetching user data from:', fullBaseUrl, baseUrl);
                 
                 try {
-                    const res = await fetch(`https://${baseUrl}/api/get-user`, {
+                    const res = await fetch(`${fullBaseUrl}/api/get-user`, {
                         method: 'POST',
                         body: JSON.stringify({ email: token.email}),
                         headers: {
@@ -66,8 +64,10 @@ export const authConfig = {
                         const userDB = await res.json();
                         token.is_blocked = userDB.is_blocked;
                     } else {
-                        console.error('Error fetching user data', res.statusText);
-                        token.is_deleted = true;
+                        const errorData = await res.json();
+                        // console.error('Error fetching user data', res.statusText, errorData);
+                        console.error('XXXXXXXXXXXXX',errorData.Message, 'YYYYYYYYYY');
+                        // token.is_deleted = true;
                     }
                 } catch (error) {
                     console.error('Error fetching user data:', error);
@@ -78,11 +78,13 @@ export const authConfig = {
         },
         async jwt({ token, user }) {
             if (user) {
+                // console.log(user)
                 token.is_blocked = user.is_blocked;
                 token.is_deleted = user.is_deleted;
             } 
+            console.log(token)
 
-            console.log('JWT callback:', { token, user });
+            // console.log('JWT callback:', { token, user });
 
             return token;
         },
