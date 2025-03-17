@@ -48,9 +48,9 @@ export const authConfig = {
                 token.is_deleted = user.is_deleted;
             } else if (token.email) {
                 const baseUrl =
-                    // process.env.NEXT_PUBLIC_BASE_URL ||
-                    // (process.env.VERCEL_URL ? `https://${process.env.VERCEL_URL}` : 'http://localhost:3000');
-                    process.env.VERCEL_URL
+                    process.env.NEXT_PUBLIC_BASE_URL ||
+                    (process.env.VERCEL_URL ? `https://${process.env.VERCEL_URL}` : 'http://localhost:3000');
+                    // process.env.VERCEL_URL
                 console.log('Fetching user data from:', baseUrl);
                 try {
                     const res = await fetch(`${baseUrl}/api/get-user`, {
