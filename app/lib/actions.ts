@@ -90,11 +90,11 @@ export async function mutateUsers(
     state: void,
     formData: FormData
 ) {
-    // const session = await auth()
-    
-    // const currentEmail = session?.user?.email
     const selectedIds = formData.getAll('userId');
-    // const selectedEmails = formData.getAll('email');
+    if (selectedIds.length === 0) {
+        await flashMessage("No one was selected", 'error');
+        redirect('/admin')
+    }
     const action = formData.get('action');
     const status = action === 'toBlocked'
     const params = selectedIds.map((_, i) => `$${i + 1}`).join(',');
