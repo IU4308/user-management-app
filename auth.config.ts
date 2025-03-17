@@ -1,5 +1,5 @@
 import type { NextAuthConfig } from 'next-auth';
-import { NextRequest, NextResponse } from 'next/server';
+import { NextResponse } from 'next/server';
 
 declare module 'next-auth' {
     interface User {
@@ -68,7 +68,7 @@ export const authConfig = {
                         if (contentType && contentType.includes('application/json')) {
                             const userDB = await res.json();
                             console.log(userDB)
-                            token.is_blocked = userDB.is_blocked;
+                            token.is_blocked = JSON.parse(userDB).is_blocked;
                             // console.log()
                         } else {
                             const text = await res.text();
