@@ -1,6 +1,6 @@
 'use client'
 import { EnvelopeIcon, ExclamationCircleIcon, LockClosedIcon } from '@heroicons/react/16/solid';
-import { useActionState, useEffect } from 'react';
+import { useActionState } from 'react';
 import { authenticate } from '@/app/lib/actions';
 import ClipLoader from "react-spinners/ClipLoader";
 
