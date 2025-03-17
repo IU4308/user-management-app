@@ -8,7 +8,6 @@ const Page = async () => {
 
     return (
         <AdminForm users={users} />
-        
     )
 }
 

@@ -1,11 +1,9 @@
 'use client'
 import { EnvelopeIcon, ExclamationCircleIcon, LockClosedIcon } from '@heroicons/react/16/solid';
-import { useActionState, useEffect, useState } from 'react';
+import { useActionState } from 'react';
 import { authenticate } from '@/app/lib/actions';
 import ClipLoader from "react-spinners/ClipLoader";
-import { usePathname, useSearchParams } from 'next/navigation';
-import { useRouter } from 'next/router';
-import Alert from './alert';
+import Flash from './flash';
 
 const LoginForm = () => {
     const [errorMessage, formAction, isPending] = useActionState(
@@ -14,9 +12,8 @@ const LoginForm = () => {
     );
 
     return (
-        
         <div className="container-fluid d-flex flex-column gap-2 py-5">
-            {!errorMessage && <Alert />}
+            <Flash />
             <h1 className="py-3">Sign In</h1>
             <form action={formAction} className="row gap-4">
                 <div className="input-group mb-3 mt-3">

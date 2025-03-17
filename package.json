@@ -10,6 +10,7 @@
   },
   "dependencies": {
     "@heroicons/react": "^2.2.0",
+    "@thewebartisan7/next-flash-message": "^1.0.1",
     "@vercel/postgres": "^0.10.0",
     "bcrypt": "^5.1.1",
     "bootstrap": "^5.3.3",

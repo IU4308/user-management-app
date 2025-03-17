@@ -1,4 +1,3 @@
-import { auth } from '@/auth'
 import LoginForm from '../ui/login-form'
 import Image from 'next/image'
 import Link from 'next/link'

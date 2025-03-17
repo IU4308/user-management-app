@@ -7,6 +7,7 @@ import bcrypt from 'bcrypt';
 import { sql } from "@vercel/postgres";
 import { revalidatePath } from "next/cache";
 import { redirect } from 'next/navigation';
+import { flashMessage } from "@thewebartisan7/next-flash-message";
 
 export async function authenticate(
   prevState: string | undefined,
@@ -93,7 +94,9 @@ export async function createUser(prevState: UserState | undefined, formData: For
     }
 
     revalidatePath('/admin');
-    redirect('/login?success=')
+
+    await flashMessage("An account has been created successfully", 'success');
+    redirect('/login')
 }
 
 export async function mutateUsers(
@@ -121,18 +124,23 @@ export async function mutateUsers(
     try {
         await sql.query(query, selectedIds);
     } catch (error) {
-        // console.log(error)
-        redirect('/admin?fail=')
+        console.log(error)
+        await flashMessage("Fail", 'error');
+        redirect('/admin')
     }
     
     if (selectedEmails.includes(currentEmail!) && (action === 'toBlocked')) {
-        redirect('/login?blocked=')
+        await flashMessage("Your account has been blocked", 'error');
+        redirect('/login')
     }
 
     if (selectedEmails.includes(currentEmail!) && ( action === 'toDeleted')) {
-        redirect('/login?deleted=')
+        await flashMessage("Your account has been deleted", 'error');
+        redirect('/login')
     }
 
     revalidatePath('/admin');
-    redirect('/admin?success=')
+
+    await flashMessage("Success", 'success');
+    redirect('/admin')
 }
