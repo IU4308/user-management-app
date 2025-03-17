@@ -45,28 +45,39 @@ export const authConfig = {
             // console.log('Session callback:', { session, token });
             
             if (!token.is_deleted && !token.is_blocked) {
-                const baseUrl = process.env.NEXT_PUBLIC_BASE_URL || process.env.VERCEL_URL || 'http://localhost:3000'
-                // const baseUrl = process.env.VERCEL_URL
-                const fullBaseUrl = baseUrl.startsWith('http') ? baseUrl : `https://${baseUrl}`;
-                console.log('Fetching user data from:', fullBaseUrl, baseUrl);
+                const baseUrl =
+                    process.env.NEXT_PUBLIC_BASE_URL ||
+                    (process.env.VERCEL_URL ? `https://${process.env.VERCEL_URL}` : 'http://localhost:3000');
+                console.log('Fetching user data from:', baseUrl);
                 
                 try {
-                    const res = await fetch(`${fullBaseUrl}/api/get-user`, {
+                    const res = await fetch(`${baseUrl}/api/get-user`, {
                         method: 'POST',
                         body: JSON.stringify({ email: token.email}),
                         headers: {
                             'Content-Type': 'application/json',
+                            // Cookie: request.headers.get('cookie') || '',
+                            Cookie: document.cookie,
                             // 'Authorization': `Bearer ${token.accessToken}`,
                         },
+                        credentials: 'include',
                     });
     
                     if (res.ok) {
                         const userDB = await res.json();
                         token.is_blocked = userDB.is_blocked;
                     } else {
-                        const errorData = await res.json();
+                        const contentType = res.headers.get('content-type');
+                        if (contentType && contentType.includes('application/json')) {
+                            const errorData = await res.json();
+                            console.error('Error fetching user data:', res.statusText, errorData.Message);
+                        } else {
+                            const text = await res.text();
+                            console.error('Unexpected response format:', text);
+                        }
+
+
                         // console.error('Error fetching user data', res.statusText, errorData);
-                        console.error('XXXXXXXXXXXXX',errorData.Message, 'YYYYYYYYYY');
                         // token.is_deleted = true;
                     }
                 } catch (error) {
