@@ -23,11 +23,6 @@ const Button = ({ name, value, icon, statuses}: ButtonProps) => {
                 type === 'submit' && 
                 <input type={"hidden"} name='action' value={value} />
             }
-            {/* <input 
-                type={"hidden"} 
-                name='action' 
-                value={value} 
-            /> */}
         </button>
     )
 }

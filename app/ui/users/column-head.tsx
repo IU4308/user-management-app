@@ -11,10 +11,11 @@ const ColumnHead = ({
     return (
         <th scope="col d-flex align-items-center">
             <button 
-              className="border-0 bg-white"
-              onClick={() => {
-                handleSort(index);
-              }}  
+                type="button"
+                className="border-0 bg-white"
+                onClick={() => {
+                    handleSort(index);
+                }}  
             >
                 <span>{title}</span>
                 
