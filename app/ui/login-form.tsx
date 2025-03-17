@@ -1,6 +1,6 @@
 'use client'
 import { EnvelopeIcon, ExclamationCircleIcon, LockClosedIcon } from '@heroicons/react/16/solid';
-import { useActionState } from 'react';
+import { useActionState, useEffect } from 'react';
 import { authenticate } from '@/app/lib/actions';
 import ClipLoader from "react-spinners/ClipLoader";
 
@@ -9,9 +9,11 @@ const LoginForm = () => {
         authenticate,
         undefined,  
     );
+
     return (
         <div className="container-fluid d-flex flex-column gap-2 py-5">
             <h1 className="py-3">Sign In</h1>
+            
             <form action={formAction} className="row gap-4">
                 <div className="input-group mb-3 mt-3">
                     <span className="input-group-text border-0 border-bottom">
@@ -34,7 +36,7 @@ const LoginForm = () => {
                     {errorMessage && (
                         <>
                             <ExclamationCircleIcon className="icon-2" />
-                            <p className="">{errorMessage}</p>
+                            <p >{errorMessage}</p>
                         </>
                     )}
                 </div>
